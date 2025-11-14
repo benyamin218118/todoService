@@ -215,7 +215,6 @@ you can run them locally by adding a -local to the end of the command like:
 
 ## Notes
 
-- All external services are **accessed via interfaces** for easy mocking.  
 - Followed Clean Architecture: **Domain → Use Cases → Interfaces → Infrastructure**.  
 - Assignment is for technical evaluation only; not production-ready.
 - This implementation strictly follows the assignment requirements and nothing extra was added.
