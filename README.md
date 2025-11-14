@@ -1,6 +1,6 @@
-# Todo Service - ICE Global Golang Assignment
+# Todo Service
 
-This is a Todo Service built in Go following **Clean Architecture** principles.  
+This is a Todo Service built in Go following Clean Architecture principles.  
 It uses **MySQL**, **Redis Stream**, and **S3 (LocalStack)**, and provides REST endpoints to manage Todo items and file uploads.
 
 ---
