@@ -210,6 +210,7 @@ Benchmarks include:
 
 you can run them locally by adding a -local to the end of the command like:
 `make migrate-local`
+
 ---
 
 ## Notes
