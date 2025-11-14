@@ -1,33 +1,54 @@
-version: '3.9'
 services:
   mysql:
     image: container-registry.oracle.com/mysql/community-server:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: todo
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: thepass
     volumes: [db-data:/var/lib/mysql]
     ports:
-      - "127.0.0.1:3306:3306"
+      - "172.17.0.1:3306:3306"
+    restart: unless-stopped
 
   localstack_s3:
     image: localstack/localstack:s3-latest
-    environment:
     ports:
-      - "127.0.0.1:4566:4566"
+      - "172.17.0.1:4566:4566"
     volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack" 
+      - localstack:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localstack_s3:4566/_localstack/init/ready"]
+      interval: 4s
+      timeout: 3s
+      retries: 16
+      start_period: 10s
+    restart: unless-stopped
 
   redis:
     image: redis:7
-
+    ports:
+      - "172.17.0.1:6379:6379"
+    restart: unless-stopped
   app:
     build: .
-    depends_on: [db, localstack, redis]
-    environment:
-      - DB_DSN=dbuser:thepass@tcp(mysql:3306)/todo
-      - S3_ENDPOINT=http://localstack_s3:4566
+    depends_on:
+      mysql: 
+        condition: service_started
+      redis: 
+        condition: service_started
+      localstack_s3:
+        condition: service_healthy
+    # environment:
+    #   - DB_DSN=dbuser:thepass@tcp(mysql:3306)/todo
+    #   - S3_ENDPOINT=http://localstack_s3:4566
+    env_file:
+      - .env 
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
 volumes:
   db-data:
+  localstack:

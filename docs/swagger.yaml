@@ -1,0 +1,78 @@
+definitions:
+  controller.CreateTodoItemReq:
+    properties:
+      description:
+        type: string
+      dueDate:
+        type: string
+      fileId:
+        type: string
+    type: object
+  controller.CreateTodoItemRes:
+    properties:
+      id:
+        type: string
+    type: object
+  controller.UploadFileRes:
+    properties:
+      id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /todo:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Todo data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateTodoItemReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controller.CreateTodoItemRes'
+      summary: Create a todo item
+      tags:
+      - todo
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a file and returns its generated ID
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ID of uploaded file
+          schema:
+            $ref: '#/definitions/controller.UploadFileRes'
+        "400":
+          description: File is required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Upload a file to S3 / LocalStack
+      tags:
+      - storage
+swagger: "2.0"

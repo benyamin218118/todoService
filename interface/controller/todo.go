@@ -29,19 +29,30 @@ func NewTodoController(todoUC *usecase.TodoUseCase) *TodoController {
 	}
 }
 
+// CreateTodo godoc
+// @Summary Create a todo item
+// @Tags todo
+// @Accept json
+// @Produce json
+// @Param request body CreateTodoItemReq true "Todo data"
+// @Success 201 {object} CreateTodoItemRes
+// @Router /todo [post]
 func (ctrl *TodoController) CreateTodo(ctx *gin.Context) {
-	var input CreateTodoItemReq
-
-	if err := ctx.BindJSON(&input); err != nil {
+	var req CreateTodoItemReq
+	if err := ctx.BindJSON(&req); err != nil {
 		ResponseBadRequest(ctx)
 		return
 	}
+	input := domain.TodoItem{
+		Description: req.Description,
+		DueDate:     req.DueDate,
+		FileID:      req.FileID,
+	}
+	if HandleIfError(ctx, input.Validate()) {
+		return
+	}
 
-	id, err := ctrl.uc.CreateTodoItem(domain.TodoItem{
-		Description: input.Description,
-		DueDate:     input.DueDate,
-		FileID:      input.FileID,
-	})
+	id, err := ctrl.uc.CreateTodoItem(ctx.Request.Context(), input)
 	if HandleIfError(ctx, err) {
 		return
 	}

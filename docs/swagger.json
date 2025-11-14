@@ -1,0 +1,123 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/todo": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Create a todo item",
+                "parameters": [
+                    {
+                        "description": "Todo data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.CreateTodoItemReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CreateTodoItemRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "description": "Uploads a file and returns its generated ID",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "storage"
+                ],
+                "summary": "Upload a file to S3 / LocalStack",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "ID of uploaded file",
+                        "schema": {
+                            "$ref": "#/definitions/controller.UploadFileRes"
+                        }
+                    },
+                    "400": {
+                        "description": "File is required",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.CreateTodoItemReq": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string"
+                },
+                "fileId": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.CreateTodoItemRes": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.UploadFileRes": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

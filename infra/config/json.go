@@ -1,7 +1,8 @@
 package config
 
 import (
-	"errors"
+	"encoding/json"
+	"os"
 
 	"github.com/benyamin218118/todoService/domain"
 	"github.com/benyamin218118/todoService/domain/contracts"
@@ -14,6 +15,14 @@ func getJSONConfigReader() contracts.IConfigReader {
 	return &jsonConfigReader{}
 }
 
-func (r *jsonConfigReader) Read() (*domain.Config, error) {
-	return nil, errors.New("not Implemented")
+func (r *jsonConfigReader) Read() (conf *domain.Config, err error) {
+	data, err := os.ReadFile("config.json")
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(data, conf); err != nil {
+		return nil, err
+	}
+	return
 }

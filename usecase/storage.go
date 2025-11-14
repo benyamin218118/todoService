@@ -3,6 +3,7 @@ package usecase
 import (
 	"io"
 
+	"github.com/benyamin218118/todoService/domain"
 	"github.com/benyamin218118/todoService/domain/contracts"
 )
 
@@ -17,5 +18,10 @@ func NewStorageUseCase(svc contracts.IStorage) *StorageUseCase {
 }
 
 func (u *StorageUseCase) Upload(file io.Reader, name string) (id *string, err error) {
+	if file == nil || name == "" {
+		return nil, domain.BadRequestError{
+			Msg: "invalid file/name",
+		}
+	}
 	return u.svc.Upload(file, name)
 }

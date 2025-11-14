@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"errors"
 	"time"
 )
 
@@ -14,10 +13,10 @@ type TodoItem struct {
 
 func (t *TodoItem) Validate() error {
 	if t.Description == "" {
-		return errors.New("description cannot be empty")
+		return BadRequestError{Msg: "description cannot be empty"}
 	}
 	if t.DueDate.Before(time.Now()) {
-		return errors.New("due date must be in the future")
+		return BadRequestError{Msg: "due date must be in the future"}
 	}
 	return nil
 }

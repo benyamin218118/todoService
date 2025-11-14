@@ -25,9 +25,9 @@ func HandleIfError(ctx *gin.Context, err error) bool {
 	}
 	status := http.StatusInternalServerError
 	switch err.(type) {
-	case *domain.BadRequestError:
+	case domain.BadRequestError:
 		status = http.StatusBadRequest
-	case *domain.ForbiddenError:
+	case domain.ForbiddenError:
 		status = http.StatusForbidden
 	default:
 		status = http.StatusInternalServerError
