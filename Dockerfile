@@ -6,14 +6,14 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o todo-service
+RUN go build -o todoService
 
 FROM debian:bookworm-slim
 WORKDIR /app
 
 RUN mkdir -p /app/infra/db
 COPY --from=builder /app/infra/db/migrations /app/infra/db/migrations
-COPY --from=builder /app/todo-service .
+COPY --from=builder /app/todoService .
 COPY --from=builder /app/docs .
 
-CMD ["./todo-service"]
+CMD ["./todoService"]

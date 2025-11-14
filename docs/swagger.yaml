@@ -10,7 +10,15 @@ definitions:
     type: object
   controller.CreateTodoItemRes:
     properties:
+      description:
+        type: string
+      dueDate:
+        type: string
+      fileId:
+        description: S3 file reference
+        type: string
       id:
+        description: UUID
         type: string
     type: object
   controller.UploadFileRes:

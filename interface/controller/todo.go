@@ -20,7 +20,7 @@ type CreateTodoItemReq struct {
 }
 
 type CreateTodoItemRes struct {
-	ID string `json:"id"`
+	domain.TodoItem
 }
 
 func NewTodoController(todoUC *usecase.TodoUseCase) *TodoController {
@@ -52,12 +52,12 @@ func (ctrl *TodoController) CreateTodo(ctx *gin.Context) {
 		return
 	}
 
-	id, err := ctrl.uc.CreateTodoItem(ctx.Request.Context(), input)
+	todoItem, err := ctrl.uc.CreateTodoItem(ctx.Request.Context(), input)
 	if HandleIfError(ctx, err) {
 		return
 	}
 
 	Response(ctx, http.StatusCreated, CreateTodoItemRes{
-		ID: *id,
+		TodoItem: *todoItem,
 	})
 }

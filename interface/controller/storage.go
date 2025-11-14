@@ -33,7 +33,7 @@ func NewStorageController(storageUC *usecase.StorageUseCase) *StorageController 
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /upload [post]
 func (ctrl *StorageController) UploadFile(ctx *gin.Context) {
-	const MaxFileSize = 10 << 20 // 5 MB
+	const MaxFileSize = 10 << 20 // 10 MB
 	fileHeader, err := ctx.FormFile("file")
 	if err != nil {
 		ResponseBadRequest(ctx)

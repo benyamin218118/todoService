@@ -63,9 +63,12 @@ func NewS3Storage(conf *domain.Config, dbConn *sql.DB) contracts.IStorage {
 }
 
 func (s *s3Storage) EnsureBucket(ctx context.Context) {
-	s.client.CreateBucket(ctx, &s3.CreateBucketInput{
+	_, err := s.client.CreateBucket(ctx, &s3.CreateBucketInput{
 		Bucket: &s.bucket,
 	})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *s3Storage) Upload(file io.Reader, filename string) (*string, error) {

@@ -117,7 +117,18 @@ const docTemplate = `{
         "controller.CreateTodoItemRes": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string"
+                },
+                "fileId": {
+                    "description": "S3 file reference",
+                    "type": "string"
+                },
                 "id": {
+                    "description": "UUID",
                     "type": "string"
                 }
             }

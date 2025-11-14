@@ -8,12 +8,12 @@ import (
 )
 
 type StorageUseCase struct {
-	svc contracts.IStorage
+	repo contracts.IStorage
 }
 
-func NewStorageUseCase(svc contracts.IStorage) *StorageUseCase {
+func NewStorageUseCase(repo contracts.IStorage) *StorageUseCase {
 	return &StorageUseCase{
-		svc: svc,
+		repo: repo,
 	}
 }
 
@@ -23,5 +23,5 @@ func (u *StorageUseCase) Upload(file io.Reader, name string) (id *string, err er
 			Msg: "invalid file/name",
 		}
 	}
-	return u.svc.Upload(file, name)
+	return u.repo.Upload(file, name)
 }

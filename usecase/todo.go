@@ -22,9 +22,9 @@ func NewTodoUseCase(todoRepo contracts.ITodoRepository, storageRepo contracts.IS
 	}
 }
 
-func (u *TodoUseCase) CreateTodoItem(ctx context.Context, todo domain.TodoItem) (id *string, err error) {
+func (u *TodoUseCase) CreateTodoItem(ctx context.Context, todo domain.TodoItem) (item *domain.TodoItem, err error) {
 	if err := todo.Validate(); err != nil {
-		return nil, &domain.BadRequestError{
+		return nil, domain.BadRequestError{
 			Msg: err.Error(),
 		}
 	}
@@ -36,17 +36,18 @@ func (u *TodoUseCase) CreateTodoItem(ctx context.Context, todo domain.TodoItem) 
 		}
 	}
 
+	var id *string
 	if id, err = u.todoRepo.Save(ctx, todo); err != nil {
-		return id, err
+		return nil, err
 	}
 
 	todo.ID = *id
 
 	data, err := StructToMap(todo)
 	if err != nil {
-		return id, err
+		return &todo, err
 	}
-	return id, u.pubsub.Publish("todoCreated", data)
+	return &todo, u.pubsub.Publish("todoCreated", data)
 }
 
 func StructToMap(s any) (map[string]interface{}, error) {
